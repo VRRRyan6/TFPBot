@@ -18,6 +18,13 @@ jobs:
           npm ci
           npm run lint
           npm run build
+      - name: Determine build pass or fail to set pretty colors in discord message
+        if: always()
+        run: |
+          if [ ${{ failure() }} ]; then
+            echo "CICD_COLOR=E01E5A" >> $GITHUB_ENV
+          else
+            echo "CICD_COLOR=2EB67D" >> $GITHUB_ENV
       - name: Send Discord Message with Build Status
         if: always()
         uses: slackapi/slack-github-action@v1.23.0
@@ -26,5 +33,16 @@ jobs:
         with:
           payload: |
             {
-              "text": "${{ github.event.repository.name }} - ${{ job.status}}\nOn Branch: ${{ github.ref }} by ${{ github.event.head_commit.author.name }}"
+              "text": "${{ github.event.repository.name }} - Build and Test Bot\nOn Branch: ${{ github.ref }}\nBy: ${{ github.event.head_commit.author.name }}",
+              "attachments": [
+                {
+                  "color": "${{ env.CICD_COLOR }}",
+                  "fields": [
+                    {
+                      "value": "${{ job.status}}",
+                      "title": "Result"
+                    }
+                  ]
+                }
+              ]
             }
