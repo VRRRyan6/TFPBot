@@ -1,0 +1,28 @@
+name: Build and Test Bot
+on:
+  push:
+    paths-ignore:
+      - README.md
+jobs:
+  action:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Configure NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Build and Test
+        run: |
+          npm ci
+      - name: Send Discord Message with Build Status
+        if: always()
+        uses: slackapi/slack-github-action@v1.23.0
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          payload: |
+            {
+              "text": "${{ github.event.repository.name }} - ${{ job.status}}\nOn Branch: ${{ github.ref }} by ${{ github.event.head_commit.author.name }}"
+            }
