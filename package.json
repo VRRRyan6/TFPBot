@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "discord.js": "^14.7.1"
   }
 }
