@@ -26,5 +26,5 @@ jobs:
         with:
           payload: |
             {
-              "text": "${{ github.event.repository.name }} - Build and Test Bot - ${{ job.status }}\nOn Branch: ${{ github.ref }}\nBy: ${{ github.event.head_commit.author.name }}",
+              "text": "${{ github.event.repository.name }} - Build and Test Bot - ${{ job.status }}\nOn Branch: ${{ github.ref }}\nBy: ${{ github.event.head_commit.author.name }}"
             }
