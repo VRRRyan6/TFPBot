@@ -4,8 +4,8 @@ dotenv.config();
 
 // Default imports
 import { getJsFiles } from './helpers';
-import path = require('node:path');
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
+import path = require('node:path');
 
 // Create client
 const client: Client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -26,6 +26,19 @@ for (const file of commandFiles) {
     }
 }
 
+// Import util
+client.util = new Collection();
+const utilPath = path.join(__dirname, 'util');
+const utilFiles = getJsFiles(utilPath);
+
+for (const file of utilFiles) {
+    const filePath = path.join(utilPath, file);
+    const util = require(filePath);
+
+    client.util.set(util.name, util)
+}
+
+
 // Import events
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = getJsFiles(eventsPath);
@@ -33,19 +46,20 @@ const eventFiles = getJsFiles(eventsPath);
 for (const file of eventFiles) {
     const filePath = path.join(eventsPath, file);
     const event = require(filePath);
+    // Go ahead and calculate used utilities beforehand
+    const utilsToRun = client.util.filter((util) => util.event === event.name)
+
     if (event.once) {
-        client.once(event.name, (...args) => event.execute(...args));
+        client.once(event.name, (...args) => {
+            utilsToRun.each((util) => { util.execute(...args); });
+            event.execute(...args)
+        });
     } else {
-        client.on(event.name, (...args) => event.execute(...args));
+        client.on(event.name, (...args) => {
+            utilsToRun.each((util) => { util.execute(...args); });
+            event.execute(...args)
+        });
     }
-}
-
-// Import util
-const utilPath = path.join(__dirname, 'util');
-const utilFiles = getJsFiles(utilPath);
-
-for (const file of utilFiles) {
-    console.log(file)
 }
 
 // Login to bot account

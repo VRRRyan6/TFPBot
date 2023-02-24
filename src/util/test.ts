@@ -1,4 +1,9 @@
+import { Events } from 'discord.js';
+
 module.exports = {
     name: 'Test',
-    event: ''
+    event: Events.ClientReady,
+    execute() {
+        console.log('yeee')
+    } 
 }
