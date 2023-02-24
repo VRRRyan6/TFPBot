@@ -53,13 +53,13 @@ for (const file of eventFiles) {
 
     if (event.once) {
         client.once(event.name, (...args) => {
-            utilsToRun.each((util) => { util.execute(...args); });
             event.execute(...args)
+            utilsToRun.each((util) => { util.execute(...args); });
         });
     } else {
         client.on(event.name, (...args) => {
-            utilsToRun.each((util) => { util.execute(...args); });
             event.execute(...args)
+            utilsToRun.each((util) => { util.execute(...args); });
         });
     }
 

@@ -4,6 +4,6 @@ module.exports = {
     name: 'Test',
     event: Events.ClientReady,
     execute() {
-        console.log('yeee')
+        console.log('Test utility has been run!!')
     } 
 }
