@@ -21,7 +21,7 @@ jobs:
       - name: Determine build pass or fail to set pretty colors in discord message
         if: always()
         run: |
-          if [ ${{ failure() }} ]; then
+          if [[ ${{ job.status}} == "failure" ]]; then
             echo "CICD_COLOR=E01E5A" >> $GITHUB_ENV
           else
             echo "CICD_COLOR=2EB67D" >> $GITHUB_ENV
