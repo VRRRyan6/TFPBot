@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 // Default imports
-import fs = require('node:fs');
+import { getJsFiles } from './helpers';
 import path = require('node:path');
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
 
@@ -13,8 +13,8 @@ const client: Client = new Client({ intents: [GatewayIntentBits.Guilds] });
 // Import commands
 client.commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(commandsPath).filter((file: any) => file.endsWith('.js'));
-// Read each file
+const commandFiles = getJsFiles(commandsPath);
+
 for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
     const command = require(filePath);
@@ -28,7 +28,7 @@ for (const file of commandFiles) {
 
 // Import events
 const eventsPath = path.join(__dirname, 'events');
-const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+const eventFiles = getJsFiles(eventsPath);
 
 for (const file of eventFiles) {
     const filePath = path.join(eventsPath, file);
@@ -38,6 +38,14 @@ for (const file of eventFiles) {
     } else {
         client.on(event.name, (...args) => event.execute(...args));
     }
+}
+
+// Import util
+const utilPath = path.join(__dirname, 'util');
+const utilFiles = getJsFiles(utilPath);
+
+for (const file of utilFiles) {
+    console.log(file)
 }
 
 // Login to bot account
