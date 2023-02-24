@@ -21,8 +21,9 @@ for (const file of commandFiles) {
 
     if ('data' in command && 'execute' in command) {
         client.commands.set(command.data.name, command);
+        console.log(`\x1b[32mLoaded command\x1b[0m [\x1b[36m${command.data.name}\x1b[0m]`);
     } else {
-        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+        console.log(`\x1b[31mThe command at \x1b[0m[\x1b[36m${filePath}\x1b[0m]\x1b[31m is missing a required "data" or "execute" property.\x1b[0m`);
     }
 }
 
@@ -35,7 +36,8 @@ for (const file of utilFiles) {
     const filePath = path.join(utilPath, file);
     const util = require(filePath);
 
-    client.util.set(util.name, util)
+    client.util.set(util.name, util);
+    console.log(`\x1b[32mLoaded utility\x1b[0m [\x1b[36m${util.name}\x1b[0m]`);
 }
 
 
@@ -60,6 +62,8 @@ for (const file of eventFiles) {
             event.execute(...args)
         });
     }
+
+    console.log(`\x1b[32mLoaded event\x1b[0m [\x1b[36m${event.name}\x1b[0m]`);
 }
 
 // Login to bot account

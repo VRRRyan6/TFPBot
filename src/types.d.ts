@@ -1,7 +1,7 @@
 import { Collection, Events, Interaction } from 'discord.js'
 
 export interface Command {
-    name: string,
+    data: string,
     execute: (arg0: Interaction) => void
 }
 

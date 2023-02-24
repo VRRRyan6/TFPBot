@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint",
     "build": "tsc",
-    "watch": "tsc -w"
+    "dev": "tsc -w & node --watch ./dist/index.js"
   },
   "author": "The Fire Panel, LLC",
   "license": "MIT",
