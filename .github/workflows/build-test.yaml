@@ -16,6 +16,8 @@ jobs:
       - name: Build and Test
         run: |
           npm ci
+          npm run lint
+          npm run build
       - name: Send Discord Message with Build Status
         if: always()
         uses: slackapi/slack-github-action@v1.23.0
