@@ -5,6 +5,7 @@ module.exports = {
         .setName('ping')
         .setDescription('Replies with Pong!'),
     async execute(interaction: ChatInputCommandInteraction) {
-        await interaction.reply('Pong!')
+        const msg = await interaction.reply({ content: 'Pinging!', fetchReply: true });
+        interaction.editReply(`Pong **${msg.createdTimestamp - interaction.createdTimestamp}ms**!`);
     }
 }
