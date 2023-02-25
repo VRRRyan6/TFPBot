@@ -6,6 +6,6 @@ module.exports = {
     once: true,
     execute(client: Client) {
         if (!client) return;
-        console.log(color.magenta(`Ready! Logged in as ${color.bgBlue(client.user!.tag)}`));
+        console.log(color.bold.magenta(`Ready! Logged in as ${color.bgCyan(client.user!.tag)}`));
     },
 };

@@ -22,9 +22,9 @@ for (const file of commandFiles) {
 
     if ('data' in command && 'execute' in command) {
         client.commands.set(command.data.name, command);
-        console.log(color.green(`Loaded command [${color.cyan(command.data.name)}]`));
+        console.log(color.green(`Loaded command ${color.bgCyan(command.data.name)}`));
     } else {
-        console.log(color.red(`The command at [${color.cyan(filePath)}] is missing a required "data" or "execute" property.`));
+        console.log(color.red(`The command at ${color.bgCyan(filePath)} is missing a required "data" or "execute" property.`));
     }
 }
 
@@ -38,7 +38,7 @@ for (const file of utilFiles) {
     const util = require(filePath);
 
     client.util.set(util.name, util);
-    console.log(color.green(`Loaded utility [${color.cyan(util.name)}]`));
+    console.log(color.green(`Loaded utility ${color.bgCyan(util.name)}`));
 }
 
 
@@ -64,7 +64,7 @@ for (const file of eventFiles) {
         });
     }
 
-    console.log(color.green(`Loaded event [${color.cyan(event.name)}]`));
+    console.log(color.green(`Loaded event ${color.bgCyan(event.name)}`));
 }
 
 // Login to bot account
