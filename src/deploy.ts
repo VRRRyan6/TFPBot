@@ -22,7 +22,7 @@ const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);
 (async () => {
     const arg = process.argv[2]
 
-    if (!arg || !(arg === 'true' || 'false')) { 
+    if (!arg || !(['true', 'false'].indexOf(arg) >= 0)) { 
         console.log(color.red('You must provide "true" or "false" for the deploy script!'))
         process.exit()
     }
@@ -43,7 +43,7 @@ const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);
                 Routes.applicationGuildCommands(process.env.CLIENT_ID!, process.env.GUILD_ID!),
                 { body: commands },
             );
-            
+
             console.log(color.bgYellow(`Deploy script set to local deploy, provide true argument for global deployment!`))
         }
 
