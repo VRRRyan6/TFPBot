@@ -5,6 +5,7 @@ dotenv.config();
 // Default imports
 import { getJsFiles } from './helpers';
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
+import color from 'ansi-colors';
 import path = require('node:path');
 
 // Create client
@@ -21,9 +22,9 @@ for (const file of commandFiles) {
 
     if ('data' in command && 'execute' in command) {
         client.commands.set(command.data.name, command);
-        console.log(`\x1b[32mLoaded command\x1b[0m [\x1b[36m${command.data.name}\x1b[0m]`);
+        console.log(color.green(`Loaded command [${color.cyan(command.data.name)}]`));
     } else {
-        console.log(`\x1b[31mThe command at \x1b[0m[\x1b[36m${filePath}\x1b[0m]\x1b[31m is missing a required "data" or "execute" property.\x1b[0m`);
+        console.log(color.red(`The command at [${color.cyan(filePath)}] is missing a required "data" or "execute" property.`));
     }
 }
 
@@ -37,7 +38,7 @@ for (const file of utilFiles) {
     const util = require(filePath);
 
     client.util.set(util.name, util);
-    console.log(`\x1b[32mLoaded utility\x1b[0m [\x1b[36m${util.name}\x1b[0m]`);
+    console.log(color.green(`Loaded utility [${color.cyan(util.name)}]`));
 }
 
 
@@ -63,7 +64,7 @@ for (const file of eventFiles) {
         });
     }
 
-    console.log(`\x1b[32mLoaded event\x1b[0m [\x1b[36m${event.name}\x1b[0m]`);
+    console.log(color.green(`Loaded event [${color.cyan(event.name)}]`));
 }
 
 // Login to bot account
