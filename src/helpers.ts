@@ -1,4 +1,5 @@
 import fs = require('node:fs');
+import { green, yellow, red } from 'ansi-colors';
 
 /**
  * Read a specified directory and grab compiled javascript files
@@ -8,4 +9,35 @@ export function getJsFiles(path: string): string[] {
     return fs.readdirSync(path).filter((file) => file.endsWith('.js'));
 }
 
-export default {}
+export default {};
+
+
+/**
+ * Override console methods
+ */
+(function(){
+    const log = console.log;
+    const warn = console.warn;
+    const error = console.error;
+
+    console.log = (message, location = null) => {
+        log(location 
+            ? green(`[${location}] ${message}`)
+            : green(message)
+        );
+    }
+
+    console.warn = (message, location = null) => {
+        warn(location
+            ? yellow(`[${location}] ${message}`)
+            : yellow(message)
+        );
+    }
+
+    console.error = (message, location = null) => {
+        error(location
+            ? red(`[${location}] ${message}`)
+            : red(message)
+        );
+    }
+})();
