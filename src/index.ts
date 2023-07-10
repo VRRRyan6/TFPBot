@@ -7,38 +7,47 @@ import { getJsFiles } from './helpers';
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
 import color from 'ansi-colors';
 import path = require('node:path');
+import fs = require('node:fs');
 
 // Create client
 const client: Client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // Import commands
 client.commands = new Collection();
-const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = getJsFiles(commandsPath);
+const commandFoldersPath = path.join(__dirname, 'commands');
+const commandFolders = fs.readdirSync(commandFoldersPath)
 
-for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
-    const command = require(filePath);
+for (const folder of commandFolders) {
+    const commandsPath = path.join(commandFoldersPath, folder);
+    const commandFiles = getJsFiles(commandsPath);
+    for (const file of commandFiles) {
+        const filePath = path.join(commandsPath, file);
+        const command = require(filePath);
 
-    if ('data' in command && 'execute' in command) {
-        client.commands.set(command.data.name, command);
-        console.log(color.green(`Loaded command ${color.bgCyan(command.data.name)}`));
-    } else {
-        console.log(color.red(`The command at ${color.bgCyan(filePath)} is missing a required "data" or "execute" property.`));
+        if ('data' in command && 'execute' in command) {
+            client.commands.set(command.data.name, command);
+            console.log(color.green(`Loaded command ${color.bgCyan(command.data.name)}`));
+        } else {
+            console.log(color.red(`The command at ${color.bgCyan(filePath)} is missing a required "data" or "execute" property.`));
+        }
     }
 }
 
 // Import util
 client.util = new Collection();
-const utilPath = path.join(__dirname, 'util');
-const utilFiles = getJsFiles(utilPath);
+const utilFoldersPath = path.join(__dirname, 'util');
+const utilFolders = fs.readdirSync(utilFoldersPath)
 
-for (const file of utilFiles) {
-    const filePath = path.join(utilPath, file);
-    const util = require(filePath);
+for (const folder of utilFolders) {
+    const utilPath = path.join(utilFoldersPath, folder);
+    const utilFiles = getJsFiles(utilPath);
+    for (const file of utilFiles) {
+        const filePath = path.join(utilPath, file);
+        const util = require(filePath);
 
-    client.util.set(util.name, util);
-    console.log(color.green(`Loaded utility ${color.bgCyan(util.name)}`));
+        client.util.set(util.name, util);
+        console.log(color.green(`Loaded utility ${color.bgCyan(util.name)}`));
+    }
 }
 
 
