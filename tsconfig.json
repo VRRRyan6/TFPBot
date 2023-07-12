@@ -13,6 +13,7 @@
         "strict": true,
         "useUnknownInCatchVariables": true,
         "noUncheckedIndexedAccess": true,
+        "skipLibCheck": true,
         
         // Modules
         "module": "CommonJS",

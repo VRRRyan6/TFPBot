@@ -15,29 +15,31 @@ export default {};
 /**
  * Override console methods
  */
-(function(){
-    const log = console.log;
-    const warn = console.warn;
-    const error = console.error;
+if (!process.env.DEV) {
+    (function(){
+        const log = console.log;
+        const warn = console.warn;
+        const error = console.error;
 
-    console.log = (message, location = null) => {
-        log(location 
-            ? green(`[${location}] ${message}`)
-            : green(message)
-        );
-    }
+        console.log = (message, location = null) => {
+            log(location 
+                ? green(`[${location}] ${message}`)
+                : green(message)
+            );
+        }
 
-    console.warn = (message, location = null) => {
-        warn(location
-            ? yellow(`[${location}] ${message}`)
-            : yellow(message)
-        );
-    }
+        console.warn = (message, location = null) => {
+            warn(location
+                ? yellow(`[${location}] ${message}`)
+                : yellow(message)
+            );
+        }
 
-    console.error = (message, location = null) => {
-        error(location
-            ? red(`[${location}] ${message}`)
-            : red(message)
-        );
-    }
-})();
+        console.error = (message, location = null) => {
+            error(location
+                ? red(`[${location}] ${message}`)
+                : red(message)
+            );
+        }
+    })();
+}
