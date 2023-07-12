@@ -1,4 +1,5 @@
 import { Collection, Events, Interaction } from 'discord.js'
+import { Sequelize } from 'sequelize'
 
 export interface Command {
     data: string,
@@ -14,6 +15,7 @@ export interface Utility {
 declare module 'discord.js' {
     export interface Client {
         commands: Collection<string, Command>,
+        db: Sequelize,
         util: Collection<string, Utility>,
     }
 }

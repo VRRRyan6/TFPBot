@@ -1,16 +1,45 @@
 import { Events } from 'discord.js';
+import { XMLParser } from 'fast-xml-parser';
 import axios from 'axios';
-import { simplify, parse } from 'txml';
 
 module.exports = {
     name: 'youtubeWatcher',
     event: Events.ClientReady,
     async execute() {
-        const video = await axios.get('https://www.youtube.com/feeds/videos.xml?channel_id=UCXuqSBlHAE6Xw-yeJA0Tunw')
-            .then((res) => {
-                const feed = simplify(parse(res.data)).feed;
-                return feed.entry[0].id
-            });
-        console.log(video)
+        const video = await getLatestVideo("UCXuqSBlHAE6Xw-yeJA0Tunw");
+        console.log(video.link)
     }
+}
+
+function getLatestVideo(channelId: string): Promise<{
+    id: string,
+    author: {
+        name: string,
+        uri: string
+    },
+    title: string,
+    link: string
+}> {
+    return axios.get(`https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`)
+        .then((res) => {
+            // When node doesn't have DOM -_-
+            const parser = new XMLParser({
+                attributeNamePrefix: '',
+                ignoreAttributes: false 
+            });
+            const parsedData = parser.parse(res.data).feed;
+            // Sort through videos to make sure we get the right latest video
+            const latestVideo = parsedData.entry.sort((a: any, b: any) => {
+                let aPubDate = new Date(a.pubDate || 0).getTime();
+                let bPubDate = new Date(b.pubDate || 0).getTime();
+                return bPubDate - aPubDate;
+            })[0];
+
+            return {
+                id: latestVideo.id,
+                author: latestVideo.author,
+                title: latestVideo.title,
+                link: latestVideo.link.href
+            }
+        });
 }
