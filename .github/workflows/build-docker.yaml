@@ -1,5 +1,7 @@
 name: Build Docker
 on: workflow_call
+env:
+  IMAGE_NAME: tfpbot
 jobs:
   build-test:
     runs-on: ubuntu-latest
