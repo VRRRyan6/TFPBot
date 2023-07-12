@@ -1,17 +1,22 @@
 import { Events } from 'discord.js';
 import { XMLParser } from 'fast-xml-parser';
+// import YoutubeChannel from '../../models/youtubeChannel';
 import axios from 'axios';
 
 module.exports = {
     name: 'youtubeWatcher',
     event: Events.ClientReady,
+    cache: [],
     async execute() {
         const video = await getLatestVideo("UCXuqSBlHAE6Xw-yeJA0Tunw");
         console.log(video.link)
+
+        //const channel = new YoutubeChannel({ channelId: 'test', latestVideo: 'test', addedBy: 'test' })
+        // channel.save();
     }
 }
 
-function getLatestVideo(channelId: string): Promise<{
+async function getLatestVideo(channelId: string): Promise<{
     id: string,
     author: {
         name: string,

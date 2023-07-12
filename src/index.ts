@@ -9,14 +9,13 @@ import color from 'ansi-colors';
 import path = require('node:path');
 import fs = require('node:fs');
 
-// Import Database
-import { Sequelize } from 'sequelize';
-
 // Create client
 const client: Client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
+// Import Database
+import db from './db';
 // Create database
-client.db = new Sequelize('sqlite::memory:')
+client.db = db
 
 // Import commands
 client.commands = new Collection();

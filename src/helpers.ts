@@ -15,7 +15,7 @@ export default {};
 /**
  * Override console methods
  */
-if (!process.env.DEV) {
+if (process.env.NODE_ENV !== 'development') {
     (function(){
         const log = console.log;
         const warn = console.warn;

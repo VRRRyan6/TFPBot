@@ -14,6 +14,7 @@
         "useUnknownInCatchVariables": true,
         "noUncheckedIndexedAccess": true,
         "skipLibCheck": true,
+        "strictPropertyInitialization": false,
         
         // Modules
         "module": "CommonJS",
