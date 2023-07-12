@@ -19,11 +19,10 @@ const youtubeWatcher: Utility = {
             this.cache.refresh = false;
         }
 
-        // let toAnnounce = []
+        let toAnnounce = [];
         this.cache?.data.forEach(async (channel: YoutubeChannel, _) => {
             const latestVideo = await getLatestVideo(channel.channelId);
 
-            let toAnnounce = [];
             if (latestVideo.id !== channel.latestVideo) {
                 await channel.update({
                     latestVideo: latestVideo.id
