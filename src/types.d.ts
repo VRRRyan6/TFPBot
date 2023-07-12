@@ -9,6 +9,7 @@ export interface Command {
 export interface Utility {
     name: string,
     event?: Events,
+    cache?: { data: any[], [key: string]: any },
     execute: (...args: any) => void
 }
 

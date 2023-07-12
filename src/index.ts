@@ -48,8 +48,8 @@ for (const folder of utilFolders) {
     const utilFiles = getJsFiles(utilPath);
     for (const file of utilFiles) {
         const filePath = path.join(utilPath, file);
-        const util = require(filePath);
-
+        const util = require(filePath).default;
+        
         client.util.set(util.name, util);
         console.log(color.green(`Loaded utility ${color.bgCyan(util.name)}`));
     }

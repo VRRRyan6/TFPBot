@@ -1,4 +1,5 @@
 import { ActivityOptions, ActivityType, Client, Events } from 'discord.js';
+import { Utility } from '../../types';
 
 const statusMessages: ActivityOptions[] = [
     {
@@ -11,7 +12,7 @@ const statusMessages: ActivityOptions[] = [
     }
 ];
 
-module.exports = {
+const randomStatus: Utility = {
     name: 'randomStatus',
     event: Events.ClientReady,
     execute(client: Client) {
@@ -29,3 +30,5 @@ module.exports = {
         return client.user?.setActivity(initialStatus);
     }
 }
+
+export default randomStatus;

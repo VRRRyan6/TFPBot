@@ -1,18 +1,36 @@
 import { Events } from 'discord.js';
 import { XMLParser } from 'fast-xml-parser';
-// import YoutubeChannel from '../../models/youtubeChannel';
+import { Utility } from '../../types';
+import YoutubeChannel from '../../models/youtubeChannel';
 import axios from 'axios';
 
-module.exports = {
+const youtubeWatcher: Utility = {
     name: 'youtubeWatcher',
     event: Events.ClientReady,
-    cache: [],
+    cache: {
+        refresh: true,
+        data: []
+    },
     async execute() {
-        const video = await getLatestVideo("UCXuqSBlHAE6Xw-yeJA0Tunw");
-        console.log(video.link)
+        if (this.cache?.refresh) {
+            const channels = await YoutubeChannel.findAll();
 
-        //const channel = new YoutubeChannel({ channelId: 'test', latestVideo: 'test', addedBy: 'test' })
-        // channel.save();
+            this.cache.data = channels;
+            this.cache.refresh = false;
+        }
+
+        // let toAnnounce = []
+        this.cache?.data.forEach(async (channel: YoutubeChannel, _) => {
+            const latestVideo = await getLatestVideo(channel.channelId);
+
+            let toAnnounce = [];
+            if (latestVideo.id !== channel.latestVideo) {
+                await channel.update({
+                    latestVideo: latestVideo.id
+                });
+                toAnnounce.push(latestVideo);
+            }
+        })
     }
 }
 
@@ -48,3 +66,5 @@ async function getLatestVideo(channelId: string): Promise<{
             }
         });
 }
+
+export default youtubeWatcher;
