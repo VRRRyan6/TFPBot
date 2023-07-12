@@ -1,5 +1,3 @@
-//import path = require('node:path');
-//import fs = require('node:fs');
 import { Sequelize } from 'sequelize-typescript';
 
 const db = new Sequelize(process.env.DB_NAME!, process.env.DB_USER!, process.env.DB_PASSWORD!, {

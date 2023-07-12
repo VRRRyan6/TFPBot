@@ -1,22 +1,21 @@
 FROM    node:18-alpine as build-stage
 
-WORKDIR /app
+WORKDIR /build
 COPY    . .
 
 RUN     npm install
 RUN     npm run build
 
-FROM    node:18-bullseye-slim as production-stage
+FROM    node:18-alpine as production-stage
 
 RUN     apt update \
-        && apt -y install iproute2 ca-certificates  \
+        && apt -y install ca-certificates  \
         && useradd -m -d /home/container container
 
-COPY    --from=build-stage /app/dist /home/container
+COPY    --from=build-stage /build/dist /home/container
 
 USER    container
 ENV     USER=container HOME=/home/container
 WORKDIR /home/container
 
-COPY    ./../entrypoint.sh /entrypoint.sh
-CMD     [ "/bin/bash", "/entrypoint.sh" ]
+CMD     [ "node", "index.js" ]
