@@ -6,7 +6,7 @@
         "allowUnusedLabels": false,
         "exactOptionalPropertyTypes": true,
         "noFallthroughCasesInSwitch": true,
-        "noImplicitOverride": true,
+        "noImplicitOverride": false,
         "noImplicitReturns": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
@@ -17,8 +17,8 @@
         "strictPropertyInitialization": false,
         
         // Modules
-        "module": "CommonJS",
-        "moduleResolution": "node",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
         "resolveJsonModule": true,
 
         // Emit
@@ -40,9 +40,9 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "lib": [
-            "ESNext"
+            "ES2022"
         ],
-        "target": "ES2021",
+        "target": "ES2022",
         "useDefineForClassFields": true
-    }
+    },
 }

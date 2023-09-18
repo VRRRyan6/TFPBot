@@ -1,7 +1,6 @@
-import { Events } from 'discord.js';
+import { Client, Events, TextChannel } from 'discord.js';
 import { XMLParser } from 'fast-xml-parser';
-import { Utility } from '../../types';
-import YoutubeChannel from '../../models/youtubeChannel';
+import { Utility } from '../../types.d.js';
 import axios from 'axios';
 
 const youtubeWatcher: Utility = {
@@ -11,25 +10,49 @@ const youtubeWatcher: Utility = {
         refresh: true,
         data: []
     },
-    async execute() {
-        if (this.cache?.refresh) {
-            const channels = await YoutubeChannel.findAll();
+    async execute(client: Client) {
+        const announcementChannel = await client.guilds.fetch('908908014965252116')
+            .then(async (guild) => {
+                return await guild.channels.fetch('1128041309307949077')
+            });
 
-            this.cache.data = channels;
-            this.cache.refresh = false;
-        }
+        setInterval(async () => {
+            if (this.cache?.refresh) {
+                const channels = await client.db
+                    .selectFrom('youtube_channels')
+                    .selectAll()
+                    .execute();
 
-        let toAnnounce = [];
-        this.cache?.data.forEach(async (channel: YoutubeChannel, _) => {
-            const latestVideo = await getLatestVideo(channel.channelId);
-
-            if (latestVideo.id !== channel.latestVideo) {
-                await channel.update({
-                    latestVideo: latestVideo.id
-                });
-                toAnnounce.push(latestVideo);
+                this.cache.data = channels;
+                this.cache.refresh = false;
             }
-        })
+
+            
+
+            this.cache?.data.forEach((channel, index) => {
+                setTimeout(async () => {
+                    const latestVideo = await getLatestVideo(channel.channel_id);
+
+                    if (latestVideo.id !== channel.latest_video) {
+                        console.log(`${latestVideo.author.name} has a new video, updating stored values and sending to announcement channel!`, this.name);
+
+                        this.cache!.data[index].latest_video = latestVideo.id;
+                        await client.db
+                            .updateTable('youtube_channels')
+                            .set({
+                                latest_video: latestVideo.id
+                            })
+                            .where("channel_id", "=", channel.channel_id)
+                            .execute();
+
+                        if (announcementChannel?.isTextBased()) {
+                            (announcementChannel as TextChannel).send(latestVideo.link)
+                        }
+                    }
+                }, index * 5000)
+            });
+
+        }, 10000);
     }
 }
 
@@ -62,7 +85,7 @@ async function getLatestVideo(channelId: string): Promise<{
                 author: latestVideo.author,
                 title: latestVideo.title,
                 link: latestVideo.link.href
-            }
+            };
         });
 }
 
