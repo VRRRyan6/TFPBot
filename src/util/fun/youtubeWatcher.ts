@@ -3,40 +3,46 @@ import { XMLParser } from 'fast-xml-parser';
 import { Utility } from '../../typings/index.js';
 import axios from 'axios';
 
+type LatestVideo = {
+    id: string,
+    author: {
+        name: string,
+        uri: string
+    },
+    title: string,
+    link: string
+}
+
 const youtubeWatcher: Utility = {
     name: 'youtubeWatcher',
     event: Events.ClientReady,
     cache: {
         refresh: true,
-        data: []
+        announcementChannels: [],
+        channels: [],
     },
     async execute(client: Client) {
-        const announcementChannel = await client.guilds.fetch('908908014965252116')
-            .then(async (guild) => {
-                return await guild.channels.fetch('1128041309307949077')
-            });
-
         setInterval(async () => {
-            if (this.cache?.refresh) {
+            if (!this.cache) return
+
+            if (this.cache.refresh) {
                 const channels = await client.db
                     .selectFrom('youtube_channels')
                     .selectAll()
                     .execute();
 
-                this.cache.data = channels;
+                this.cache.channels = channels;
                 this.cache.refresh = false;
             }
 
-            
-
-            this.cache?.data.forEach((channel, index) => {
+            this.cache.channels.forEach((channel: any, index: number) => {
                 setTimeout(async () => {
                     const latestVideo = await getLatestVideo(channel.channel_id);
 
                     if (latestVideo.id !== channel.latest_video) {
                         console.log(`${latestVideo.author.name} has a new video, updating stored values and sending to announcement channel!`, this.name);
 
-                        this.cache!.data[index].latest_video = latestVideo.id;
+                        this.cache!.channels[index].latest_video = latestVideo.id;
                         await client.db
                             .updateTable('youtube_channels')
                             .set({
@@ -45,9 +51,7 @@ const youtubeWatcher: Utility = {
                             .where("channel_id", "=", channel.channel_id)
                             .execute();
 
-                        if (announcementChannel?.isTextBased()) {
-                            (announcementChannel as TextChannel).send(latestVideo.link)
-                        }
+                        announceVideo(client, channel.guild_id, latestVideo)
                     }
                 }, index * 5000)
             });
@@ -56,15 +60,7 @@ const youtubeWatcher: Utility = {
     }
 }
 
-async function getLatestVideo(channelId: string): Promise<{
-    id: string,
-    author: {
-        name: string,
-        uri: string
-    },
-    title: string,
-    link: string
-}> {
+async function getLatestVideo(channelId: string): Promise<LatestVideo> {
     return axios.get(`https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`)
         .then((res) => {
             // When node doesn't have DOM -_-
@@ -87,6 +83,21 @@ async function getLatestVideo(channelId: string): Promise<{
                 link: latestVideo.link.href
             };
         });
+}
+
+async function announceVideo(client: Client, guildId: string, latestVideo: LatestVideo) {
+    await client.guilds.fetch(guildId)
+        .then(async (guild) => {
+            return guild.channels.cache.find((channel) => {
+                return channel.name === 'new-videos';
+            })
+        })
+        .then((channel) => {
+            (channel as TextChannel)
+                .send(latestVideo.link)
+                .catch((err) => { console.error(err) })
+        })
+        .catch(() => {})
 }
 
 export default youtubeWatcher;
