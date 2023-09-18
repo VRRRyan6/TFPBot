@@ -1,5 +1,5 @@
 import { ActivityOptions, ActivityType, Client, Events } from 'discord.js';
-import { Utility } from '../../types.d.js';
+import { Utility } from '../../typings/index.js';
 
 const statusMessages: ActivityOptions[] = [
     {
