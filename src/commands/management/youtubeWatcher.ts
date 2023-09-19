@@ -59,7 +59,10 @@ export default {
                         guild_id: interaction.guild.id,
                         added_by: interaction.user.id
                     })
-                    .execute();
+                    .execute()
+                    .catch((err) => {
+                        console.error(err)
+                    });
 
                 interaction.reply({
                     content: `Added ${channelId} to the watchlist, changes should take effect next cycle!`,
@@ -71,7 +74,10 @@ export default {
                 client.db
                     .deleteFrom('youtube_channels')
                     .where('channel_id', '=', channelId)
-                    .execute();
+                    .execute()                    
+                    .catch((err) => {
+                        console.error(err)
+                    });
 
                 interaction.reply({
                     content: `Removed ${channelId} from the watchlist, changes should take effect next cycle!`,
