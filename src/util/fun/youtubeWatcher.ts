@@ -56,7 +56,7 @@ const youtubeWatcher: Utility = {
                 }, index * 5000)
             });
 
-        }, 30 * 1000);
+        }, 30 * 60 * 1000);
     }
 }
 
