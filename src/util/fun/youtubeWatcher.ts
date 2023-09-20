@@ -30,13 +30,10 @@ const youtubeWatcher: Utility = {
 }
 
 async function runWatcher(client: Client) {
-    console.log('running');
     const cache = client.util.get('youtubeWatcher')?.cache
     if (!cache) return
 
     if (cache.refresh) {
-        console.log('refreshing cache', cache.refresh);
-
         const channels = await client.db
             .selectFrom('youtube_channels')
             .selectAll()
@@ -48,7 +45,14 @@ async function runWatcher(client: Client) {
 
     cache.channels.forEach((channel: any, index: number) => {
         setTimeout(async () => {
-            const latestVideo = await getLatestVideo(channel.channel_id);
+            const latestVideo = await getLatestVideo(channel.channel_id)
+                .catch((err) => {
+                    console.error(err);
+                });
+
+            if (!latestVideo) {
+                return;
+            }
 
             if (latestVideo.id !== channel.latest_video) {
                 console.log(`${latestVideo.author.name} has a new video, updating stored values and sending to announcement channel!`);
@@ -68,7 +72,7 @@ async function runWatcher(client: Client) {
     });
 }
 
-async function getLatestVideo(channelId: string): Promise<LatestVideo> {
+async function getLatestVideo(channelId: string): Promise<LatestVideo | null> {
     return axios.get(`https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`)
         .then((res) => {
             // When node doesn't have DOM -_-
@@ -77,6 +81,11 @@ async function getLatestVideo(channelId: string): Promise<LatestVideo> {
                 ignoreAttributes: false 
             });
             const parsedData = parser.parse(res.data).feed;
+
+            if (!parsedData.entry) {
+                return null;
+            }
+
             // Sort through videos to make sure we get the right latest video
             const latestVideo = parsedData.entry.sort((a: any, b: any) => {
                 let aPubDate = new Date(a.pubDate || 0).getTime();
