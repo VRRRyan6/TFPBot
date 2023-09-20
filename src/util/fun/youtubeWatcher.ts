@@ -23,26 +23,29 @@ const youtubeWatcher: Utility = {
     },
     async execute(client: Client) {
         setInterval(async () => {
-            if (!this.cache) return
+            const cache = client.util.get('youtubeWatcher')?.cache
+            if (!cache) return
 
-            if (this.cache.refresh) {
+            if (cache.refresh) {
+                console.log('refreshing cache', cache.refresh);
+
                 const channels = await client.db
                     .selectFrom('youtube_channels')
                     .selectAll()
                     .execute();
 
-                this.cache.channels = channels;
-                this.cache.refresh = false;
+                cache.channels = channels;
+                cache.refresh = false;
             }
 
-            this.cache.channels.forEach((channel: any, index: number) => {
+            cache.channels.forEach((channel: any, index: number) => {
                 setTimeout(async () => {
                     const latestVideo = await getLatestVideo(channel.channel_id);
 
                     if (latestVideo.id !== channel.latest_video) {
                         console.log(`${latestVideo.author.name} has a new video, updating stored values and sending to announcement channel!`, this.name);
 
-                        this.cache!.channels[index].latest_video = latestVideo.id;
+                        cache!.channels[index].latest_video = latestVideo.id;
                         await client.db
                             .updateTable('youtube_channels')
                             .set({

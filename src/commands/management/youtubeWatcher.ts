@@ -88,10 +88,10 @@ export default {
         }
 
         // Tell the utility to grab from the database next run
-        const util = client.util.get('youtubeWatcher');
+        const cache = client.util.get('youtubeWatcher')?.cache;
 
-        if (util?.cache?.refresh) {
-            util.cache.refresh = true;
+        if (cache) {
+            cache.refresh = true;
         }
 
         return true
