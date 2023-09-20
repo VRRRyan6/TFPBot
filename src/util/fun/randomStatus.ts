@@ -3,11 +3,15 @@ import { Utility } from '../../typings/index.js';
 
 const statusMessages: ActivityOptions[] = [
     {
-        name: 'over the peasants',
+        name: 'slow dancing in a burning room',
+        type: ActivityType.Playing
+    },
+    {
+        name: 'new videos coming in May',
         type: ActivityType.Watching
     },
     {
-        name: 'with your feelings',
+        name: 'Jake you pompous ass',
         type: ActivityType.Playing
     }
 ];
