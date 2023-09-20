@@ -22,45 +22,50 @@ const youtubeWatcher: Utility = {
         channels: [],
     },
     async execute(client: Client) {
+        runWatcher(client);
         setInterval(async () => {
-            const cache = client.util.get('youtubeWatcher')?.cache
-            if (!cache) return
-
-            if (cache.refresh) {
-                console.log('refreshing cache', cache.refresh);
-
-                const channels = await client.db
-                    .selectFrom('youtube_channels')
-                    .selectAll()
-                    .execute();
-
-                cache.channels = channels;
-                cache.refresh = false;
-            }
-
-            cache.channels.forEach((channel: any, index: number) => {
-                setTimeout(async () => {
-                    const latestVideo = await getLatestVideo(channel.channel_id);
-
-                    if (latestVideo.id !== channel.latest_video) {
-                        console.log(`${latestVideo.author.name} has a new video, updating stored values and sending to announcement channel!`, this.name);
-
-                        cache!.channels[index].latest_video = latestVideo.id;
-                        await client.db
-                            .updateTable('youtube_channels')
-                            .set({
-                                latest_video: latestVideo.id
-                            })
-                            .where("channel_id", "=", channel.channel_id)
-                            .execute();
-
-                        announceVideo(client, channel.guild_id, latestVideo)
-                    }
-                }, index * 5000)
-            });
-
+            runWatcher(client)
         }, 30 * 60 * 1000);
     }
+}
+
+async function runWatcher(client: Client) {
+    console.log('running');
+    const cache = client.util.get('youtubeWatcher')?.cache
+    if (!cache) return
+
+    if (cache.refresh) {
+        console.log('refreshing cache', cache.refresh);
+
+        const channels = await client.db
+            .selectFrom('youtube_channels')
+            .selectAll()
+            .execute();
+
+        cache.channels = channels;
+        cache.refresh = false;
+    }
+
+    cache.channels.forEach((channel: any, index: number) => {
+        setTimeout(async () => {
+            const latestVideo = await getLatestVideo(channel.channel_id);
+
+            if (latestVideo.id !== channel.latest_video) {
+                console.log(`${latestVideo.author.name} has a new video, updating stored values and sending to announcement channel!`);
+
+                cache!.channels[index].latest_video = latestVideo.id;
+                await client.db
+                    .updateTable('youtube_channels')
+                    .set({
+                        latest_video: latestVideo.id
+                    })
+                    .where("channel_id", "=", channel.channel_id)
+                    .execute();
+
+                announceVideo(client, channel.guild_id, latestVideo)
+            }
+        }, index * 5000)
+    });
 }
 
 async function getLatestVideo(channelId: string): Promise<LatestVideo> {
