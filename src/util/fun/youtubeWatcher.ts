@@ -47,7 +47,7 @@ async function runWatcher(client: Client) {
         setTimeout(async () => {
             const latestVideo = await getLatestVideo(channel.channel_id)
                 .catch((err) => {
-                    console.error(err);
+                    console.error(err, channel);
                 });
 
             if (!latestVideo) {
