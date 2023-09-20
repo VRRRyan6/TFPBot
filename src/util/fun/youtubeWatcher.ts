@@ -86,12 +86,19 @@ async function getLatestVideo(channelId: string): Promise<LatestVideo | null> {
                 return null;
             }
 
-            // Sort through videos to make sure we get the right latest video
-            const latestVideo = parsedData.entry.sort((a: any, b: any) => {
-                let aPubDate = new Date(a.pubDate || 0).getTime();
-                let bPubDate = new Date(b.pubDate || 0).getTime();
-                return bPubDate - aPubDate;
-            })[0];
+            let latestVideo;
+            // Check if we can sort through the videos, before this would error out if user had only one video.
+            if (parsedData.entry.length) {
+                // Sort through videos to make sure we get the right latest video
+                latestVideo = parsedData.entry.sort((a: any, b: any) => {
+                    let aPubDate = new Date(a.pubDate || 0).getTime();
+                    let bPubDate = new Date(b.pubDate || 0).getTime();
+                    return bPubDate - aPubDate;
+                })[0];
+            } else {
+                latestVideo = parsedData.entry;
+            }
+
 
             return {
                 id: latestVideo.id,
