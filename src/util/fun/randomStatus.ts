@@ -3,16 +3,16 @@ import { Utility } from '../../typings/index.js';
 
 const statusMessages: ActivityOptions[] = [
     {
-        name: 'slow dancing in a burning room',
-        type: ActivityType.Playing
+        name: '🔥 Slow dancing in a burning room',
+        type: ActivityType.Custom
     },
     {
-        name: 'new videos coming in May',
-        type: ActivityType.Watching
+        name: '📼 New videos coming in May',
+        type: ActivityType.Custom
     },
     {
-        name: 'Jake you pompous ass',
-        type: ActivityType.Playing
+        name: '🍑 Jake you pompous ass',
+        type: ActivityType.Custom
     }
 ];
 
@@ -29,6 +29,7 @@ const randomStatus: Utility = {
             const status = statusMessages[Math.floor(statusMessages.length * Math.random())]
             client.user?.setActivity(status)
         }, (3 * 60 * 1000));
+
 
         console.log(`Initialized function selected "${initialStatus.name}" as initial status.`, this.name)
         return client.user?.setActivity(initialStatus);
