@@ -76,7 +76,7 @@ async function getLatestVideo(channelId: string): Promise<LatestVideo | null> {
     return axios.get(`https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`)
         .then((res) => {
             // When node doesn't have DOM -_-
-            const parser = new XMLParser({
+            const parser: any = new XMLParser({
                 attributeNamePrefix: '',
                 ignoreAttributes: false 
             });

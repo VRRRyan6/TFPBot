@@ -3,7 +3,9 @@ import { Events, type Interaction } from 'discord.js'
 export default {
     name: Events.InteractionCreate,
     async execute(interaction: Interaction) {
-        if (!interaction.isChatInputCommand()) return;
+        if (!interaction.isChatInputCommand()) {
+            return;
+        }
 
         const command = interaction.client.commands.get(interaction.commandName);
 
