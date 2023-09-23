@@ -75,7 +75,7 @@ const simplexModelCheckerCommand: Command = {
             'syncable': `Horn will operate when power is applied, but strobe will only flash when power is removed`,
             'smartsync': `Requires a compatible Simplex Panel, or a SmartSync module such as the 4905-9938 to operate Horn or Strobe`,
             'addressable': `For use only with high-end Simplex Panels, such as the 4100U`,
-            'es': `Requires a Simplex 4007ES, 4010ES, or 4100ES for operation`
+            'es': `Requires an IDNAC compatible Simplex Panel/Power Supply, or a SmartSync module such as the 4905-9938 to operate Horn or Strobe`
         }
 
         return interaction.reply({
