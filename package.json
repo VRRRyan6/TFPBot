@@ -1,6 +1,6 @@
 {
   "name": "tfp-bot",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "TFP's Custom Discord Bot",
   "type": "module",
   "main": "dist/index.js",
