@@ -9,6 +9,7 @@
     "build": "tsc",
     "watch": "nodemon",
     "deploy": "ts-node --files --esm src/deploy.ts",
+    "version": "git add . && git commit -m '%s' && git tag %s",
     "preversion": "ts-node --files --esm src/preversion.ts"
   },
   "author": "The Fire Panel, LLC",
