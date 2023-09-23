@@ -73,9 +73,9 @@ const simplexModelCheckerCommand: Command = {
             'freerun': `When power is applied, both the horn and strobe will run`,
             'selectable': `When power is applied, the horn will run always. The strobe can flash on it's own, or with SmartSync depending on a DIP Switch setting`,
             'syncable': `Horn will operate when power is applied, but strobe will only flash when power is removed`,
-            'smartsync': `Requires a compatible Simplex Panel, or a SmartSync module such as the 4905-9938 to operate Horn or Strobe`,
+            'smartsync': `Requires an IDNAC compatible Simplex Panel/Power Supply, or a SmartSync module such as the 4905-9938 to operate Horn or Strobe`,
             'addressable': `For use only with high-end Simplex Panels, such as the 4100U`,
-            'es': `Requires an IDNAC compatible Simplex Panel/Power Supply, or a SmartSync module such as the 4905-9938 to operate Horn or Strobe`
+            'es': `Requires a Simplex 4007ES, 4010ES, or 4100ES for operation`
         }
 
         return interaction.reply({
