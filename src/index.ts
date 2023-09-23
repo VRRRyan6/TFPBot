@@ -2,6 +2,9 @@
 import { config as dotenv } from 'dotenv';
 dotenv();
 
+// This is automatically updated when npm version is ran successfully
+process.env.version = '1.0.0';
+
 // Default imports
 import { getJsFiles } from './helpers.js';
 import { Client, Collection, GatewayIntentBits } from 'discord.js';

@@ -8,7 +8,8 @@
     "lint": "eslint",
     "build": "tsc",
     "watch": "nodemon",
-    "deploy": "ts-node --files --esm src/deploy.ts"
+    "deploy": "ts-node --files --esm src/deploy.ts",
+    "preversion": "ts-node --files --esm src/preversion.ts"
   },
   "author": "The Fire Panel, LLC",
   "license": "MIT",

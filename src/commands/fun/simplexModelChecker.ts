@@ -52,7 +52,7 @@ const simplexModelCheckerCommand: Command = {
             .setTitle('Simplex Model Number Checker')
             .setAuthor({ name: interaction.user.displayName, iconURL: interaction.user.displayAvatarURL() })
             .setTimestamp()
-            .setFooter({ text: `Version ${process.env.npm_package_version}`});
+            .setFooter({ text: `Version ${process.env.version}`});
 
         if (!foundCategory) return interaction.reply({
             embeds: [
