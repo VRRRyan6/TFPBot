@@ -3,7 +3,7 @@ import { config as dotenv } from 'dotenv';
 dotenv();
 
 // This is automatically updated when npm version is ran successfully
-process.env.version = '1.0.1';
+process.env.version = '1.0.2';
 
 // Default imports
 import { getJsFiles } from './helpers.js';
