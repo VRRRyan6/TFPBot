@@ -58,17 +58,10 @@ for (const file of eventFiles) {
     // Go ahead and calculate used utilities beforehand
     const utilsToRun = client.util.filter((util) => util.event === event.name)
 
-    if (event.once) {
-        client.once(event.name, (...args) => {
-            event.execute(...args)
-            utilsToRun.each((util) => { util.execute(...args); });
-        });
-    } else {
-        client.on(event.name, (...args) => {
-            event.execute(...args)
-            utilsToRun.each((util) => { util.execute(...args); });
-        });
-    }
+    client[event.once ? 'once' : 'on'](event.name, (...args) => {
+        event.execute(...args)
+        utilsToRun.each((util) => { util.execute(...args); });
+    });
 
     console.log(color.green(`Loaded event ${color.bgCyan(event.name)}`));
 }
