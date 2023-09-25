@@ -3,32 +3,21 @@ dotenv();
 
 import { REST, Routes } from 'discord.js';
 import color from 'chalk';
-import { dirname, join } from 'node:path';
-import { readdirSync } from 'node:fs';
-import { pathToFileURL, fileURLToPath } from 'node:url';
-import { getJsFiles } from './helpers.js';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import { pathToFileURL } from 'node:url';
+import { getFiles } from './helpers.js';
 
 const commands: any = [];
-const commandFoldersPath = join(__dirname, 'commands');
-const commandFolders = readdirSync(commandFoldersPath)
+const commandFiles = getFiles('commands')
 
-for (const folder of commandFolders) {
-    const commandsPath = join(commandFoldersPath, folder);
-    const commandFiles = getJsFiles(commandsPath);
+for (const file of commandFiles) {
+    const command = await import(pathToFileURL(file).href)
+        .then((command) => command.default);
 
-    for (const file of commandFiles) {
-        const filePath: string = join(commandsPath, file);
-        const command = await import(pathToFileURL(filePath).href)
-            .then((command) => command.default);
-
-        if ('data' in command && 'execute' in command) {
-            commands.push(command.data.toJSON());
-            console.log(color.green(`Loaded command ${color.bgCyan(command.data.name)}`));
-        } else {
-            console.log(color.red(`The command at ${color.bgCyan(filePath)} is missing a required "data" or "execute" property.`));
-        }
+    if ('data' in command && 'execute' in command) {
+        commands.push(command.data.toJSON());
+        console.log(color.green(`Loaded command ${color.bgCyan(command.data.name)}`));
+    } else {
+        console.log(color.red(`The command at ${color.bgCyan(file)} is missing a required "data" or "execute" property.`));
     }
 }
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);

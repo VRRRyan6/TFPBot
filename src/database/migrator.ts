@@ -1,14 +1,11 @@
-import { resolve, join, dirname } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import {
   Migrator,
   Migration
 } from 'kysely';
 import { db } from './database.js';
-import { getJsFiles } from '../helpers.js';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const migrationsFolder = join(__dirname, './migrations')
+import { getFiles } from '../helpers.js';
 
 class FileMigrationProvider {
     public folder: string;
@@ -19,13 +16,13 @@ class FileMigrationProvider {
   
     async getMigrations(): Promise<any> {
         const migrations: Record<string, Migration> = {};
-        const files = getJsFiles(migrationsFolder);
+        const files = getFiles('./database/migrations');
     
         for await (const file of files) {
-            const migration = await import(
-                pathToFileURL(join(migrationsFolder, file)).href
-            )
-            const migrationName = file.substring(0, file.lastIndexOf('.'))
+            const migration = await import(pathToFileURL(file).href)
+            const migrationName = file
+                .substring(0, file.lastIndexOf('.'))
+                .replace(/^.*(\\|\/|\:)/, '')
 
             migrations[migrationName] = migration;
         }

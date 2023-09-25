@@ -1,4 +1,9 @@
 {
+    "ts-node": {
+        "transpileOnly": true,
+        "files": true,
+        "esm": true,
+    },
     // Mapped from https://www.typescriptlang.org/tsconfig
     "compilerOptions": {
         "typeRoots": [

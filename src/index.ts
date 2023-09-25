@@ -6,14 +6,10 @@ dotenv();
 process.env.version = '1.0.2';
 
 // Default imports
-import { getJsFiles } from './helpers.js';
+import { getFiles } from './helpers.js';
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
-import { join, dirname } from 'node:path';
-import { readdirSync } from 'node:fs';
-import { pathToFileURL, fileURLToPath } from 'node:url';
+import { pathToFileURL } from 'node:url';
 import color from 'chalk';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Create client
 const client: Client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -24,56 +20,40 @@ client.db = db;
 
 // Import commands
 client.commands = new Collection();
-const commandFoldersPath = join(__dirname, 'commands');
-const commandFolders = readdirSync(commandFoldersPath)
+const commandFiles = getFiles('commands')
 
-for (const folder of commandFolders) {
-    const commandsPath = join(commandFoldersPath, folder);
-    const commandFiles = getJsFiles(commandsPath);
+for (const file of commandFiles) {
+    const command = await import(pathToFileURL(file).href)
+        .then((command) => command.default);
 
-    for (const file of commandFiles) {
-        const filePath: string = join(commandsPath, file);
-        const command = await import(pathToFileURL(filePath).href)
-            .then((command) => command.default);
-
-        if ('data' in command && 'execute' in command) {
-            client.commands.set(command.data.name, command);
-            console.log(color.green(`Loaded command ${color.bgCyan(command.data.name)}`));
-        } else {
-            console.log(color.red(`The command at ${color.bgCyan(filePath)} is missing a required "data" or "execute" property.`));
-        }
+    if ('data' in command && 'execute' in command) {
+        client.commands.set(command.data.name, command);
+        console.log(color.green(`Loaded command ${color.bgCyan(command.data.name)}`));
+    } else {
+        console.log(color.red(`The command at ${color.bgCyan(file)} is missing a required "data" or "execute" property.`));
     }
 }
+
 
 // Import util
 client.util = new Collection();
-const utilFoldersPath = join(__dirname, 'util');
-const utilFolders = readdirSync(utilFoldersPath)
+const utilFiles = getFiles('util');
 
-for (const folder of utilFolders) {
+for (const file of utilFiles) {
+    const util = await import(pathToFileURL(file).href)
+        .then((util) => util.default);;
 
-    const utilPath = join(utilFoldersPath, folder);
-    const utilFiles = getJsFiles(utilPath);
-
-    for (const file of utilFiles) {
-        const filePath = join(utilPath, file);
-        const util = await import(pathToFileURL(filePath).href)
-            .then((util) => util.default);;
-
-        if (!util) { continue; }
-        
-        client.util.set(util.name, util);
-        console.log(color.green(`Loaded utility ${color.bgCyan(util.name)}`));
-    }
+    if (!util) { continue; }
+    
+    client.util.set(util.name, util);
+    console.log(color.green(`Loaded utility ${color.bgCyan(util.name)}`));
 }
 
 // Import events
-const eventsPath = join(__dirname, 'events');
-const eventFiles = getJsFiles(eventsPath);
+const eventFiles = getFiles('events');
 
 for (const file of eventFiles) {
-    const filePath = join(eventsPath, file);
-    const event = await import(pathToFileURL(filePath).href)
+    const event = await import(pathToFileURL(file).href)
         .then((event) => event.default);
     // Go ahead and calculate used utilities beforehand
     const utilsToRun = client.util.filter((util) => util.event === event.name)
