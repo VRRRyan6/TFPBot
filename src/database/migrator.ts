@@ -5,7 +5,7 @@ import {
   Migration
 } from 'kysely';
 import { db } from './database.js';
-import { getFiles } from '../helpers.js';
+import { getFiles, getFileName } from '../helpers.js';
 
 class FileMigrationProvider {
     public folder: string;
@@ -19,10 +19,8 @@ class FileMigrationProvider {
         const files = getFiles('./database/migrations');
     
         for await (const file of files) {
-            const migration = await import(pathToFileURL(file).href)
-            const migrationName = file
-                .substring(0, file.lastIndexOf('.'))
-                .replace(/^.*(\\|\/|\:)/, '')
+            const migration = await import(pathToFileURL(file).href);
+            const migrationName = getFileName(file);
 
             migrations[migrationName] = migration;
         }
@@ -37,19 +35,19 @@ export async function migrateToLatest() {
         provider: new FileMigrationProvider(resolve('./database/migrations')),
       });
 
-    const { error, results } = await migrator.migrateToLatest()
+    const { error, results } = await migrator.migrateToLatest();
 
     results?.forEach((it) => {
         if (it.status === 'Success') {
-            console.log(`Migration "${it.migrationName}" was executed successfully`)
+            console.log(`Migration "${it.migrationName}" was executed successfully`);
         } else if (it.status === 'Error') {
-            console.error(`Failed to execute migration "${it.migrationName}"`)
+            console.error(`Failed to execute migration "${it.migrationName}"`);
         }
     })
 
     if (error) {
-        console.error('failed to migrate')
-        console.error(error)
-        process.exit(1)
+        console.error('failed to migrate');
+        console.error(error);
+        process.exit(1);
     }
 }

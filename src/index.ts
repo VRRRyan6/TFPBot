@@ -20,7 +20,7 @@ client.db = db;
 
 // Import commands
 client.commands = new Collection();
-const commandFiles = getFiles('commands')
+const commandFiles = getFiles('commands');
 
 for (const file of commandFiles) {
     const command = await import(pathToFileURL(file).href)
@@ -56,7 +56,7 @@ for (const file of eventFiles) {
     const event = await import(pathToFileURL(file).href)
         .then((event) => event.default);
     // Go ahead and calculate used utilities beforehand
-    const utilsToRun = client.util.filter((util) => util.event === event.name)
+    const utilsToRun = client.util.filter((util) => util.event === event.name);
 
     client[event.once ? 'once' : 'on'](event.name, (...args) => {
         event.execute(...args)
