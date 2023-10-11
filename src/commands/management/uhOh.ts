@@ -120,13 +120,18 @@ async function sendToModerated(guild: Guild, userOption: CommandInteractionOptio
     const channel = await guild.channels.create({
         name: `moderated-${user.displayName}`,
         parent: category.id,
-        reason: `Sent to moderated chanel by ${interaction.user.displayName}`,
-        permissionOverwrites: [
-            {
-                id: user.id,
-                allow: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.ViewChannel, PermissionFlagsBits.ReadMessageHistory]
-            }
-        ]
+        reason: `Sent to moderated channel by ${interaction.user.displayName}`
+    }).then(async (channel) => {
+        await channel.lockPermissions()
+            .catch(console.error)
+
+        await channel.permissionOverwrites.create(user, {
+            SendMessages: true,
+            ViewChannel: true,
+            ReadMessageHistory: true
+        })
+
+        return channel;
     }).catch(console.error);
     if (!channel) return;
 
