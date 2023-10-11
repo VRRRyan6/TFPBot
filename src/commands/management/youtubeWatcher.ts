@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, PermissionFlagsBits } from 'discord.js';
+import { SlashCommandBuilder, PermissionFlagsBits, type ChatInputCommandInteraction } from 'discord.js';
 import { Command } from '../../typings/index.js';
 
 const youtubeWatcherCommand: Command = {
@@ -61,9 +61,7 @@ const youtubeWatcherCommand: Command = {
                         added_by: interaction.user.id
                     })
                     .execute()
-                    .catch((err) => {
-                        console.error(err)
-                    });
+                    .catch(console.error);
 
                 interaction.reply({
                     content: `Added ${channelId} to the watchlist, changes should take effect next cycle!`,
@@ -76,9 +74,7 @@ const youtubeWatcherCommand: Command = {
                     .deleteFrom('youtube_channels')
                     .where('channel_id', '=', channelId)
                     .execute()                    
-                    .catch((err) => {
-                        console.error(err)
-                    });
+                    .catch(console.error);
 
                 interaction.reply({
                     content: `Removed ${channelId} from the watchlist, changes should take effect next cycle!`,

@@ -1,13 +1,16 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { Command } from '../../typings/index.js';
+import { type Command } from '../../typings/index.js';
 
 const insults: string[] = ['Putting this %s mid sentence to test replace reply. %s %s'];
 
 const insultCommand: Command = {
     data: new SlashCommandBuilder()
-        .addUserOption(option => option.setName('user')
-        .setDescription('User to insult!')
-        .setRequired(true))
+        .addUserOption(option => 
+            option
+                .setName('user')
+                .setDescription('User to insult!')
+                .setRequired(true)
+            )
         .setName('insult')
         .setDescription('Provides the mentioned user with an insult!'),
     async execute(interaction) {

@@ -1,6 +1,6 @@
-import { Client, Events, TextChannel } from 'discord.js';
+import { Events, type Client, type TextChannel } from 'discord.js';
 import { XMLParser } from 'fast-xml-parser';
-import { Utility } from '../../typings/index.js';
+import { type Utility } from '../../typings/index.js';
 import axios from 'axios';
 
 type LatestVideo = {
@@ -13,6 +13,14 @@ type LatestVideo = {
     link: string
 }
 
+/**
+ * @name youtubeWatcher
+ * @event ClientReady
+ * @author DrPepperG
+ * @desc This utility runs on bot ready and provides the logic behind the #new-videos channel.
+ * Every 30 minutes each channel will be checked for new videos compared to last video stored,
+ * if new video is found then a link will be sent in #new-videos.
+ */
 const youtubeWatcher: Utility = {
     name: 'youtubeWatcher',
     event: Events.ClientReady,
@@ -113,7 +121,7 @@ async function announceVideo(client: Client, guildId: string, latestVideo: Lates
     await client.guilds.fetch(guildId)
         .then(async (guild) => {
             return guild.channels.cache.find((channel) => {
-                return channel.name === 'new-videos';
+                return channel.name === client.getConfig('youtubeWatcherChannel', guild.id);
             })
         })
         .then((channel) => {
