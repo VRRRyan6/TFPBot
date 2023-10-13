@@ -15,6 +15,7 @@ import type {
     Kysely
 } from 'kysely';
 import type { DB } from './database.js';
+import type { globalConfig } from '../index.ts';
 
 // #region Modules
 
@@ -23,7 +24,7 @@ declare module 'discord.js' {
         commands: Collection<string, Command>,
         db: Kysely<DB>,
         util: Collection<string, Utility>
-        getConfig(option: string, guild?: string): string | undefined,
+        getConfig(option: keyof typeof globalConfig, guild?: string): string | undefined,
         refreshConfig(): Promise<void>
     }
 }

@@ -6,8 +6,12 @@ dotenv();
 process.env.version = '1.2.0';
 
 // Default imports
+import {
+    Client,
+    Collection,
+    GatewayIntentBits,
+} from 'discord.js';
 import { getFiles } from './helpers.js';
-import { Client, Collection, GatewayIntentBits } from 'discord.js';
 import { pathToFileURL } from 'node:url';
 import color from 'chalk';
 
@@ -30,8 +34,8 @@ const storedConfig: {
     [key: string]: Collection<string, string>
 } = {}
 
-// Default configuration values, used if guild does not have any overwrites yet
-const globalConfig: { [key: string]: string } = {
+// Export config values as a type for type checking, guilds will use same keys as they are just overwrites of default values
+export const globalConfig = {
     'botLogsChannel': 'bot-logs', // sendBotLog
     'youtubeWatcherChannel': 'new-videos', // youtubeWatcher
     'moderatedCategory': 'Moderated Channels', // uhOh
@@ -43,7 +47,7 @@ for (const [option, value] of Object.entries(globalConfig)) {
     storedConfig['GLOBAL']?.set(option, value)
 }
 
-client.refreshConfig = async function(): Promise<void> {
+client.refreshConfig = async function() {
     await client.db
         .selectFrom('configs')
         .selectAll()
