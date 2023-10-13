@@ -36,10 +36,15 @@ const storedConfig: {
 
 // Export config values as a type for type checking, guilds will use same keys as they are just overwrites of default values
 export const globalConfig = {
+    // Bot Log
     'botLogsChannel': 'bot-logs', // sendBotLog
-    'youtubeWatcherChannel': 'new-videos', // youtubeWatcher
-    'moderatedCategory': 'Moderated Channels', // uhOh
-    'moderatedIsolationRole': 'Moderated' // uhOh
+
+    // youtubeWatcher
+    'youtubeWatcherChannel': 'new-videos',
+
+    // uhOh
+    'moderatedCategory': 'Moderated Channels',
+    'moderatedIsolationRole': 'Moderated'
 }
 
 storedConfig['GLOBAL'] = new Collection();
