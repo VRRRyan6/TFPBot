@@ -22,8 +22,6 @@ const messageDeletionLog: Utility = {
         if (message.channel.isDMBased()) return;
         if (!message.partial && (message.author?.id === message.client.user.id)) return;
 
-        console.log(message)
-
         const embed = new EmbedBuilder();
         embed.addFields(
                 {
