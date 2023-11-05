@@ -134,15 +134,25 @@ for (const file of eventFiles) {
     const utilsToRun = client.util.filter((util) => util.events?.includes(event.name));
 
     client[event.once ? 'once' : 'on'](event.name, (...args) => {
-        event.execute(...args)
+        // The event file execute itself
+        try {
+            event.execute(...args)
+        } catch(e) {
+            console.error(e);
+        }
+
+        // The utilities that are tied to this event
         utilsToRun.each((util) => { 
-            util.execute(...args, event.name); 
+            try {
+                util.execute(...args, event.name);
+            } catch(e) {
+                console.error(e);
+            }
         });
     });
 
     console.log(color.green(`Loaded event ${color.bgCyan(event.name)}`));
 }
-
 // #endregion Auto imports
 
 // Login to bot account
