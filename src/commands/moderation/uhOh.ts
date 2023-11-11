@@ -50,7 +50,7 @@ const uhOhCommand: Command = {
         .setDMPermission(false)
         .setName('uhoh')
         .setDescription('Moves mentioned user to a private channel for moderation discussion.'),
-    async execute(interaction: ChatInputCommandInteraction) {
+    async execute(interaction) {
         if (!interaction.channel || !interaction.channel.isTextBased() || !interaction.inCachedGuild()) return;
 
         const subCommand = interaction.options.getSubcommand();
@@ -150,10 +150,10 @@ async function sendToModerated(guild: Guild, userOption: CommandInteractionOptio
     // If isolation is true then give the moderated role
     if (interaction.options.get('isolate')?.value) {
         const role = guild.roles.cache.find((role) => {
-            return (role.name === guild.client.getConfig('moderatedIsolationRole'))
+            return (role.name === guild.client.getConfig('moderatedIsolationRole', guild.id))
         });
         if (!role) {
-            console.log(`${guild.name} is missing role by the name of (${guild.client.getConfig('moderatedIsolationRole')}), skipping isolation`);
+            console.log(`${guild.name} is missing role by the name of (${guild.client.getConfig('moderatedIsolationRole', guild.id)}), skipping isolation`);
         } else {
             (member as GuildMember).roles
                 .add(role.id)
@@ -235,7 +235,7 @@ async function releaseFromModerated(guild: Guild, userOption: CommandInteraction
     // If user is still in the guild then remove their role
     if (member) {
         const role = guild.roles.cache.find((role) => {
-            return (role.name === guild.client.getConfig('moderatedIsolationRole'));
+            return (role.name === guild.client.getConfig('moderatedIsolationRole', guild.id));
         });
         if (role) {
             (member as GuildMember).roles
