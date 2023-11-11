@@ -100,6 +100,7 @@ client.getConfig = function (option?: keyof typeof globalConfig | null, guild?: 
     if (!option && !guild) return globalConfig;
 
     const config = storedConfig[(guild ? guild : 'GLOBAL')]
+    if (!option && guild && !config) return globalConfig;
     if (!config) return;
 
     // If no option is given but guild is return the guild's config merged with the global config
