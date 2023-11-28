@@ -2,7 +2,7 @@ import {
     Events,
     type DMChannel,
     type GuildChannel
-} from 'discord.js'
+} from 'discord.js';
 import { type Utility } from '../../typings/index.js';
 
 /**
@@ -30,7 +30,7 @@ const uhOhChannelDelete: Utility = {
                 const guild = channel.guild;
 
                 const role = guild.roles.cache.find((role) => {
-                    return (role.name === guild.client.getConfig('moderatedIsolationRole', guild.id))
+                    return (role.name === guild.client.getConfig('moderatedIsolationRole', guild.id));
                 });
                 if (!role) return console.log(`${guild.name} is missing role by the name of (${guild.client.getConfig('moderatedIsolationRole', guild.id)}), skipping isolation`);
 
@@ -46,9 +46,9 @@ const uhOhChannelDelete: Utility = {
             .catch(console.error)
             .then((res) => {
                 if (!res || res.numDeletedRows <= 0) return;
-                console.log(`Removed channel (${channel.id}) from the moderated channels database as it was deleted.`)
+                console.log(`Removed channel (${channel.id}) from the moderated channels database as it was deleted.`);
             });
     }
-}
+};
 
 export default uhOhChannelDelete;

@@ -10,6 +10,6 @@ const pingCommand: Command = {
 
         interaction.editReply(`Pong **${msg.createdTimestamp - interaction.createdTimestamp}ms**!`);
     }
-}
+};
 
 export default pingCommand;

@@ -74,7 +74,7 @@ const configCommand: Command = {
                 .catch(console.error);
         }
     }
-}
+};
 
 async function listConfig(interaction: ChatInputCommandInteraction) {
     const { client, guild } = interaction;
@@ -110,7 +110,7 @@ async function listConfig(interaction: ChatInputCommandInteraction) {
         });
 
         embeds.push(embed);
-    })
+    });
 
     await interaction.editReply({
         embeds: embeds
@@ -136,7 +136,7 @@ async function setConfig(interaction: ChatInputCommandInteraction) {
     if (!configArray.includes(option)) {
         return interaction.editReply({
             content: 'You must provide a valid config option.'
-        })
+        });
     }
  
     const existingConfig = await client.db

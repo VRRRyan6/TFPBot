@@ -4,7 +4,7 @@ import {
     type AutocompleteInteraction,
     type BaseInteraction,
     type ChatInputCommandInteraction,
-} from 'discord.js'
+} from 'discord.js';
 import type { Command } from '../typings/index.js';
 
 export default {
@@ -26,7 +26,7 @@ export default {
                 handleCommand(interaction, (command, interaction) => {
                     if (!interaction.isAutocomplete() || !command.autocomplete) return;
                     command.autocomplete(interaction);
-                })
+                });
 
                 break;
         }

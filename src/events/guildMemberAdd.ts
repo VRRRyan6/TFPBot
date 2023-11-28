@@ -1,6 +1,6 @@
 import { 
     Events
-} from 'discord.js'
+} from 'discord.js';
 
 export default {
     name: Events.GuildMemberAdd,

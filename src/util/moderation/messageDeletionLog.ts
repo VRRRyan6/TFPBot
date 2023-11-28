@@ -4,7 +4,7 @@ import {
     Events,
     type PartialMessage,
     type Message,
-} from 'discord.js'
+} from 'discord.js';
 import type { Utility } from '../../typings/index.js';
 import { sendBotLog } from '../../helpers.js';
 
@@ -34,7 +34,7 @@ const messageDeletionLog: Utility = {
                     value: codeBlock(message.id),
                     inline: true
                 }
-            )
+            );
 
         if (!message.partial) {
             embed.addFields(
@@ -47,15 +47,15 @@ const messageDeletionLog: Utility = {
                     value: codeBlock(message.content ? message.content : 'No message content.')
                 }
             )
-            .setAuthor({ name: message.author.displayName, iconURL: message.author.displayAvatarURL() })
+            .setAuthor({ name: message.author.displayName, iconURL: message.author.displayAvatarURL() });
         }
 
         sendBotLog(message.guild, {
             title: 'Message Deleted',
             color: 'Red',
             embed: embed
-        })
+        });
     }
-}
+};
 
 export default messageDeletionLog;

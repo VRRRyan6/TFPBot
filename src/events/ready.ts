@@ -1,4 +1,4 @@
-import { Events, type Client } from 'discord.js'
+import { Events, type Client } from 'discord.js';
 import color from 'chalk';
 
 export default {

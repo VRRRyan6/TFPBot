@@ -2,7 +2,7 @@ import { Events, type Client } from 'discord.js';
 import { type Utility } from '../../typings/index.js';
 import axios from 'axios';
 
-const githubRepo = 'https://raw.githubusercontent.com/TheFirePanel/SimplexModelChecker/main'
+const githubRepo = 'https://raw.githubusercontent.com/TheFirePanel/SimplexModelChecker/main';
 
 /**
  * @name simplexModelChecker
@@ -35,13 +35,13 @@ const simplexModelChecker: Utility = {
         categories.forEach(async (category) => {
             const devices: string[] = await axios.get(`${githubRepo}/${category}.json`)
                 .then((res) => {
-                    return res.data.devices
+                    return res.data.devices;
                 });
 
             cache.devices[category] = devices;
             cache.autoDevices.push(...devices);
         });
     }
-}
+};
 
 export default simplexModelChecker;

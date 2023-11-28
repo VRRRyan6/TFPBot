@@ -13,7 +13,7 @@ const simplexModelCheckerCommand: Command = {
         .setName('smc')
         .setDescription('Responds with simplex model type.'),
     async autocomplete(interaction) {
-        const cache = interaction.client.util.get('simplexModelChecker')?.cache
+        const cache = interaction.client.util.get('simplexModelChecker')?.cache;
         if (!cache) return;
 
         const focusedValue: string = interaction.options.getFocused();
@@ -78,7 +78,7 @@ const simplexModelCheckerCommand: Command = {
             'smartsync': `Requires an IDNAC compatible Simplex Panel/Power Supply, or a SmartSync module such as the 4905-9938 to operate Horn or Strobe`,
             'addressable': `For use only with high-end Simplex Panels, such as the 4100U`,
             'es': `Requires a Simplex 4007ES, 4010ES, or 4100ES for operation`
-        }
+        };
 
         return interaction.editReply({
             embeds: [
@@ -93,6 +93,6 @@ const simplexModelCheckerCommand: Command = {
             ]
         });
     }
-}
+};
 
 export default simplexModelCheckerCommand;

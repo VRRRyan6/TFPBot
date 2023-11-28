@@ -5,7 +5,7 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "lint": "eslint ./src/**.ts",
+    "lint": "eslint src --ext .ts",
     "build": "tsc",
     "watch": "nodemon",
     "deploy": "node --loader ts-node/esm src/deploy.ts",

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type {
     AutocompleteInteraction,
     Attachment,
@@ -11,7 +12,6 @@ import type {
     SlashCommandBuilder
 } from 'discord.js';
 import type {
-    ColumnType,
     Kysely
 } from 'kysely';
 import type { DB } from './database.js';
@@ -44,7 +44,7 @@ export interface Command {
 export interface Utility {
     name: string,
     events?: Events | Events[],
-    cache?: { [key: string]: Array | Object | string },
+    cache?: { [key: string]: Array | object | string },
     execute: (...args: any, event?: Events) => void
 }
 

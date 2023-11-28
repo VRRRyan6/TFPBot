@@ -91,8 +91,8 @@ const youtubeWatcherCommand: Command = {
             cache.refresh = true;
         }
 
-        return true
+        return true;
     }
-}
+};
 
 export default youtubeWatcherCommand;

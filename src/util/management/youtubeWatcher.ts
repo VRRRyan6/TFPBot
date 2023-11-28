@@ -32,14 +32,14 @@ const youtubeWatcher: Utility = {
     async execute(client: Client) {
         runWatcher(client);
         setInterval(async () => {
-            runWatcher(client)
+            runWatcher(client);
         }, 30 * 60 * 1000);
     }
-}
+};
 
 async function runWatcher(client: Client) {
-    const cache = client.util.get('youtubeWatcher')?.cache
-    if (!cache) return
+    const cache = client.util.get('youtubeWatcher')?.cache;
+    if (!cache) return;
 
     if (cache.refresh) {
         const channels = await client.db
@@ -99,8 +99,8 @@ async function getLatestVideo(channelId: string): Promise<LatestVideo | null> {
             if (parsedData.entry.length) {
                 // Sort through videos to make sure we get the right latest video
                 latestVideo = parsedData.entry.sort((a: any, b: any) => {
-                    let aPubDate = new Date(a.pubDate || 0).getTime();
-                    let bPubDate = new Date(b.pubDate || 0).getTime();
+                    const aPubDate = new Date(a.pubDate || 0).getTime();
+                    const bPubDate = new Date(b.pubDate || 0).getTime();
                     return bPubDate - aPubDate;
                 })[0];
             } else {
@@ -124,12 +124,12 @@ async function announceVideo(client: Client, guildId: string, latestVideo: Lates
         .then(async (guild) => {
             return guild.channels.cache.find((channel) => {
                 return (channel.name === channelName);
-            })
+            });
         })
         .then((channel) => {
             (channel as TextChannel)
                 .send(latestVideo.link)
-                .catch((err) => { console.error(err) })
+                .catch((err) => { console.error(err); });
         })
         .catch(() => {});
 }

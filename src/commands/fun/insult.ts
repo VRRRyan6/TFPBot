@@ -14,14 +14,14 @@ const insultCommand: Command = {
         .setName('insult')
         .setDescription('Provides the mentioned user with an insult!'),
     async execute(interaction) {
-        const user = interaction.options.get('user')?.user
-        if (!user) return interaction.reply({ content: `I have not recieved a user to insult!`, ephemeral: true })
+        const user = interaction.options.get('user')?.user;
+        if (!user) return interaction.reply({ content: `I have not recieved a user to insult!`, ephemeral: true });
 
         const insult = insults[Math.floor(insults.length * Math.random())];
         if (!insult) return interaction.reply({ content: `I have no insults to give!`, ephemeral: true });
 
-        return interaction.reply(insult.replace(/%s/g, user.toString()))
+        return interaction.reply(insult.replace(/%s/g, user.toString()));
     }
-}
+};
 
 export default insultCommand;

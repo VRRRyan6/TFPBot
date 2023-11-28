@@ -2,7 +2,7 @@ import {
     EmbedBuilder,
     Events,
     type GuildMember
-} from 'discord.js'
+} from 'discord.js';
 import type { Utility } from '../../typings/index.js';
 
 /**
@@ -49,6 +49,6 @@ const messageDeletionLog: Utility = {
             embeds: [embed]
         }).catch(console.error);
     }
-}
+};
 
 export default messageDeletionLog;

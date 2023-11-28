@@ -83,7 +83,7 @@ const uhOhCommand: Command = {
         
         return;
     }
-}
+};
 
 async function sendToModerated(guild: Guild, userOption: CommandInteractionOption, interaction: ChatInputCommandInteraction) {
     const { user, member } = userOption;
@@ -97,7 +97,7 @@ async function sendToModerated(guild: Guild, userOption: CommandInteractionOptio
         ])
         .executeTakeFirst()
         .then((count) => {
-            return (count && count.channel_count > 0)
+            return (count && count.channel_count > 0);
         });
 
     if (alreadyModerated) {
@@ -106,7 +106,7 @@ async function sendToModerated(guild: Guild, userOption: CommandInteractionOptio
     }
     
     // Get category information
-    const categoryConfig = interaction.client.getConfig('moderatedCategory', guild.id)
+    const categoryConfig = interaction.client.getConfig('moderatedCategory', guild.id);
     const category = guild.channels.cache.find((channel) => {
         return channel.name === categoryConfig;
     });
@@ -123,13 +123,13 @@ async function sendToModerated(guild: Guild, userOption: CommandInteractionOptio
         reason: `Sent to moderated channel by ${interaction.user.displayName}`
     }).then(async (channel) => {
         await channel.lockPermissions()
-            .catch(console.error)
+            .catch(console.error);
 
         await channel.permissionOverwrites.create(user, {
             SendMessages: true,
             ViewChannel: true,
             ReadMessageHistory: true
-        })
+        });
 
         return channel;
     }).catch(console.error);
@@ -150,7 +150,7 @@ async function sendToModerated(guild: Guild, userOption: CommandInteractionOptio
     // If isolation is true then give the moderated role
     if (interaction.options.get('isolate')?.value) {
         const role = guild.roles.cache.find((role) => {
-            return (role.name === guild.client.getConfig('moderatedIsolationRole', guild.id))
+            return (role.name === guild.client.getConfig('moderatedIsolationRole', guild.id));
         });
         if (!role) {
             console.log(`${guild.name} is missing role by the name of (${guild.client.getConfig('moderatedIsolationRole', guild.id)}), skipping isolation`);
@@ -218,7 +218,7 @@ async function releaseFromModerated(guild: Guild, userOption: CommandInteraction
                                 .where('channel_id', '=', channelId.channel_id)
                                 .execute();
                         }
-                    })
+                    });
                 
                 if (!channel) continue;
                 channels.push(channel);
@@ -266,13 +266,13 @@ async function releaseFromModerated(guild: Guild, userOption: CommandInteraction
                 value: `<@${interaction.user.id}>`,
                 inline: true
             }
-        )
+        );
         
 
     const botLogOptions: BotLogOptions['data'] = {
         title: 'User released from moderated channel',
         embed: embed
-    }
+    };
     if (messageAttachment) botLogOptions.attachments = [messageAttachment];
 
     sendBotLog(guild, botLogOptions);
