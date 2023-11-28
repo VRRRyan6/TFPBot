@@ -42,7 +42,7 @@ const storedConfig: {
     [key: string]: Collection<string, string>
 } = {
     'GLOBAL': new Collection()
-}
+};
 
 // Export config values as a type for type checking, guilds will use same keys as they are just overwrites of default values
 export const globalConfig = {
@@ -54,14 +54,14 @@ export const globalConfig = {
     // uhOh
     'moderatedCategory': 'Moderated Channels',
     'moderatedIsolationRole': 'Moderated'
-}
+};
 
 for (const [option, value] of Object.entries(globalConfig)) {
-    storedConfig['GLOBAL']?.set(option, value)
+    storedConfig['GLOBAL']?.set(option, value);
 }
 
 client.refreshConfig = async function() {
-    console.log(color.yellow(`Got request to refresh/load config from database`))
+    console.log(color.yellow(`Got request to refresh/load config from database`));
     await client.db
         .selectFrom('configs')
         .selectAll()
@@ -80,11 +80,11 @@ client.refreshConfig = async function() {
 
                 if (!storedConfig[config.guild_id]) storedConfig[config.guild_id] = new Collection;
                 storedConfig[config.guild_id]?.set(config.option, config.value);
-            })
+            });
 
-            console.log(color.yellow(`Loaded configuration from database`))
-        })
-}
+            console.log(color.yellow(`Loaded configuration from database`));
+        });
+};
 
 // Await startup of bot to load configuration from database
 await client.refreshConfig()
@@ -95,11 +95,12 @@ await client.refreshConfig()
  * @param option The config option to grab, provide none for all
  * @param guild The guild to get the configuration for
  */
+/* eslint @typescript-eslint/no-explicit-any: "off" */
 client.getConfig = function (option?: keyof typeof globalConfig | null, guild?: string): any {
     // If no parameters are given return global config
     if (!option && !guild) return storedConfig['GLOBAL'];
 
-    const config = storedConfig[(guild ? guild : 'GLOBAL')]
+    const config = storedConfig[(guild ? guild : 'GLOBAL')];
     // If guild does not have a stored config return global config
     if (!option && guild && !config) return storedConfig['GLOBAL'];
 
@@ -117,9 +118,9 @@ client.getConfig = function (option?: keyof typeof globalConfig | null, guild?: 
     // We need an option at this point, return if we don't have one
     if (!option) return;
 
-    const configOption = config?.get(option)
-    return configOption ? configOption : storedConfig['GLOBAL'].get(option)
-}
+    const configOption = config?.get(option);
+    return configOption ? configOption : storedConfig['GLOBAL'].get(option);
+};
 
 // #endregion Bot settings logic
 
@@ -148,7 +149,7 @@ const utilFiles = getFiles('util');
 
 for (const file of utilFiles) {
     const util = await import(pathToFileURL(file).href)
-        .then((util) => util.default);;
+        .then((util) => util.default);
 
     if (!util) { continue; }
     
@@ -168,7 +169,7 @@ for (const file of eventFiles) {
     client[event.once ? 'once' : 'on'](event.name, (...args) => {
         // The event file execute itself
         try {
-            event.execute(...args)
+            event.execute(...args);
         } catch(e) {
             console.error(e);
         }

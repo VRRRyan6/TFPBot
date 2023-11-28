@@ -5,6 +5,7 @@ import {
     AttachmentBuilder,
     EmbedBuilder,
     type MessageCreateOptions,
+    type Guild,
     type GuildBasedChannel,
     type Message,
     type FetchMessagesOptions
@@ -36,7 +37,7 @@ export function getFiles(path: string, arrayOfFiles?: string[]): string[] {
 
             fileArray.push(filePath);
         }
-    })
+    });
 
     return fileArray;
 }
@@ -57,7 +58,7 @@ export function getFileName(path: string): string {
  * @param data Data of what to send in the log message
  * @returns void
  */
-export function sendBotLog(guild: BotLogOptions['guild'], data: BotLogOptions['data'] = {
+export function sendBotLog(guild: Guild, data: BotLogOptions['data'] = {
         title: 'Bot Log',
         color: 'Red'
     }): void {
@@ -81,7 +82,7 @@ export function sendBotLog(guild: BotLogOptions['guild'], data: BotLogOptions['d
         // Generate send options
         const sendOptions: MessageCreateOptions = {
             embeds: [embedToSend]
-        }
+        };
         if (attachments) sendOptions.files = attachments;
         
         logChannel.send(sendOptions);
@@ -94,6 +95,7 @@ export function sendBotLog(guild: BotLogOptions['guild'], data: BotLogOptions['d
  */
 export async function archiveMessages(channel: GuildBasedChannel, options: { limit?: number, attachment?: { name: string } }): Promise<AttachmentBuilder>;
 export async function archiveMessages(channel: GuildBasedChannel, options: { limit?: number }): Promise<Message[]>;
+/* eslint @typescript-eslint/no-explicit-any: "off" */
 export async function archiveMessages(channel: GuildBasedChannel, options: any) {
     if (!channel.isTextBased()) return;
     const { attachment, limit } = options;
@@ -101,14 +103,14 @@ export async function archiveMessages(channel: GuildBasedChannel, options: any) 
     const archivedMessages: Message[] = [];
     let last_id;
 
-    while (true) {
+    for (;;) {
         const options: FetchMessagesOptions = {
             limit: 100
-        }
+        };
         if (last_id) options.before = last_id;
 
         const messages = await channel.messages.fetch(options)
-            .catch(console.error)
+            .catch(console.error);
         if (!messages) break;
         
         archivedMessages.push(...messages.values());
@@ -125,7 +127,7 @@ export async function archiveMessages(channel: GuildBasedChannel, options: any) 
 
         if (formattedData.length <= 0) return null;
 
-        return new AttachmentBuilder(Buffer.from(formattedData, 'utf-8'), { name: `${attachment.name}.txt` })
+        return new AttachmentBuilder(Buffer.from(formattedData, 'utf-8'), { name: `${attachment.name}.txt` });
     }
     return archivedMessages;
 }
@@ -140,10 +142,10 @@ export function chunkEntries<T>(array: T[], chunkSize: number): T[][] {
 
     for (let i = 0; i < array.length; i += chunkSize) {
         const chunk = array.slice(i, i + chunkSize);
-        chunks.push(chunk)
+        chunks.push(chunk);
     }
 
-    return chunks
+    return chunks;
 }
 
 export default {};
