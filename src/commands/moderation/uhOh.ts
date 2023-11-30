@@ -12,7 +12,6 @@ import {
 } from 'discord.js';
 import { Command } from '../../typings/index.js';
 import { archiveMessages, sendBotLog } from '../../helpers.js';
-import { BotLogOptions } from '../../typings/index.js';
 import chalk from 'chalk';
 
 const uhOhCommand: Command = {
@@ -269,9 +268,9 @@ async function releaseFromModerated(guild: Guild, userOption: CommandInteraction
         );
         
 
-    const botLogOptions: BotLogOptions['data'] = {
+    const botLogOptions: Parameters<typeof sendBotLog>[1] = {
         title: 'User released from moderated channel',
-        embed: embed
+        embed: embed,
     };
     if (messageAttachment) botLogOptions.attachments = [messageAttachment];
 

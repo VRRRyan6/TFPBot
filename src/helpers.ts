@@ -3,14 +3,17 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
     AttachmentBuilder,
-    EmbedBuilder,
-    type MessageCreateOptions,
-    type Guild,
-    type GuildBasedChannel,
-    type Message,
-    type FetchMessagesOptions
+    EmbedBuilder
 } from 'discord.js';
-import { BotLogOptions } from './typings/index.js';
+import type {
+    Attachment,
+    ColorResolvable,
+    MessageCreateOptions,
+    Guild,
+    GuildBasedChannel,
+    Message,
+    FetchMessagesOptions,
+} from 'discord.js';
 
 /**
  * Read a specified directory and grab typescript or javascript files
@@ -58,7 +61,12 @@ export function getFileName(path: string): string {
  * @param data Data of what to send in the log message
  * @returns void
  */
-export function sendBotLog(guild: Guild, data: BotLogOptions['data'] = {
+export function sendBotLog(guild: Guild, data: { 
+    title: string,
+    color?: ColorResolvable, 
+    embed?: EmbedBuilder,
+    attachments?: (Attachment | AttachmentBuilder)[]
+} = {
         title: 'Bot Log',
         color: 'Red'
     }): void {
@@ -146,6 +154,24 @@ export function chunkEntries<T>(array: T[], chunkSize: number): T[][] {
     }
 
     return chunks;
+}
+
+export function embedEntries<T>(array: T[], options: any): void {
+    const { chunkSize } = options;
+    const chunks = chunkEntries(array, chunkSize || 25);
+
+    chunks.forEach((chunk, i) => {
+        const page = i + 1;
+        const embed = new EmbedBuilder()
+            .setColor('Red')
+            .setTimestamp()
+            .setFooter({
+                text: `Page ${page}-${chunks.length} • Version ${process.env.version}`
+            });
+
+        console.log(chunk, embed);
+    });
+    console.log(chunks);
 }
 
 export default {};

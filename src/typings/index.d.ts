@@ -1,14 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type {
     AutocompleteInteraction,
-    Attachment,
-    AttachmentBuilder ,
     ChatInputCommandInteraction,
     Collection,
-    ColorResolvable,
-    EmbedBuilder,
     Events,
-    Guild,
     SlashCommandBuilder
 } from 'discord.js';
 import type {
@@ -46,16 +41,6 @@ export interface Utility {
     events?: Events | Events[],
     cache?: { [key: string]: Array | object | string },
     execute: (...args: any, event?: Events) => void
-}
-
-export interface BotLogOptions {
-    guild: Guild,
-    data: { 
-        title: string,
-        color?: ColorResolvable, 
-        embed?: EmbedBuilder,
-        attachments?: (Attachment | AttachmentBuilder)[]
-    }
 }
 
 // #endregion Interfaces
