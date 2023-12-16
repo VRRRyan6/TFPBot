@@ -91,6 +91,7 @@ async function sendToModerated(guild: Guild, userOption: CommandInteractionOptio
     // Check if user is already moderated
     const alreadyModerated = await interaction.client.db
         .selectFrom('mod_channels')
+        .where('user_id', '=', user.id)
         .select(({ fn }) => [
             fn.count<number>('channel_id').as('channel_count')
         ])
