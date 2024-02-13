@@ -14,6 +14,7 @@ import type {
     Message,
     FetchMessagesOptions,
 } from 'discord.js';
+import { NumericRange } from './typings/index.js';
 
 /**
  * Read a specified directory and grab typescript or javascript files
@@ -163,7 +164,7 @@ export function chunkEntries<T>(array: T[], chunkSize: number): T[][] {
 export function embedEntries<T>(array: T[], options: {
     title: string,
     description?: string,
-    chunkSize?: number
+    chunkSize?: NumericRange<1, 25>
     color?: ColorResolvable
 }, forEach: (embed: EmbedBuilder, chunk: T) => void): EmbedBuilder[] {
     const { title, description, chunkSize, color } = options;
