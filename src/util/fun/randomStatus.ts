@@ -15,15 +15,15 @@ const statusMessages: ActivityOptions[] = [
         type: ActivityType.Custom
     },
     {
-        name: `🥺 I'm like a pull station, handle with care.`,
+        name: `🥺 I'm like a pull station, handle with care`,
         type: ActivityType.Custom
     },
     {
-        name: `🚩 Ready to slide down the pole... into the DMs.`,
+        name: `🚩 Ready to slide down the pole... into the DMs`,
         type: ActivityType.Custom
     },
     {
-        name: `🍕 On standby, ready to evacuate... to the nearest pizza place.`,
+        name: `🍕 On standby, ready to evacuate... to the nearest pizza place`,
         type: ActivityType.Custom
     }
 ];
